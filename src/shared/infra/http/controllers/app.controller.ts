@@ -1,13 +1,16 @@
-import { Controller, Get } from '@nestjs/common';
-import { PrismaService } from '@shared/infra/prisma/Prisma.service';
+import { Controller, Get, Inject } from '@nestjs/common';
 import { User } from '@prisma/client';
+import UserRepository from '@modules/users/infra/repositories/UserRepository';
 
 @Controller()
 export class AppController {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    @Inject('UserRepository')
+    private userRepository: UserRepository
+  ) {}
 
   @Get()
   public async index(): Promise<User[]> {
-    return this.prisma.user.findMany();
+    return this.userRepository.getAllUsers();
   }
 }
