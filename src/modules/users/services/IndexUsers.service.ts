@@ -1,17 +1,19 @@
 import { User } from '.prisma/client';
 import { Inject, Injectable } from '@nestjs/common';
 
-import UserRepository from '../infra/prisma/repositories/UserRepository';
+import { IUserRepository } from '../repositories/IUserRepository';
 
 @Injectable()
 export default class IndexUsersService {
   constructor(
     @Inject('UserRepository')
-    private userRepository: UserRepository
+    private userRepository: IUserRepository
   ) {}
 
   public async execute(): Promise<User[]> {
-    const users = await this.userRepository.getAllUsers();
+    const users = await this.userRepository.findAllUsers();
+
+    users.forEach((user) => delete user.password);
 
     return users;
   }
