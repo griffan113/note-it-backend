@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Inject,
   Param,
@@ -11,15 +12,16 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { User } from '@prisma/client';
-import { AuthGuard } from '@nestjs/passport';
 
 import { CreateUserDTO } from '@modules/users/dtos/CreateUserDTO';
 import { UpdateUserDTO } from '@modules/users/dtos/UpdateUserDTO';
 import CreateUserService from '@modules/users/services/CreateUser.service';
 import IndexUsersService from '@modules/users/services/IndexUsers.service';
 import UpdateUserService from '@modules/users/services/UpdateUser.service';
+import DeleteUserService from '@modules/users/services/DeleteUser.service';
+import { SetPublicRoute } from '../decorators/SetPublicRoute.decorator';
+import { EnsureAdminGuard } from '../guards/EnsureAdmin.guard';
 
-@UseGuards(AuthGuard())
 @Controller('users')
 export default class UsersController {
   constructor(
@@ -30,9 +32,13 @@ export default class UsersController {
     private createUserService: CreateUserService,
 
     @Inject('UpdateUserService')
-    private updateUserService: UpdateUserService
+    private updateUserService: UpdateUserService,
+
+    @Inject('DeleteUserService')
+    private deleteUserService: DeleteUserService
   ) {}
 
+  @UseGuards(EnsureAdminGuard)
   @Get()
   public async index(): Promise<User[]> {
     const users = await this.indexUsersService.execute();
@@ -40,6 +46,7 @@ export default class UsersController {
     return users;
   }
 
+  @SetPublicRoute()
   @Post()
   public async create(
     @Body(ValidationPipe) createUserDto: CreateUserDTO
@@ -60,5 +67,12 @@ export default class UsersController {
     });
 
     return updateUser;
+  }
+
+  @Delete('/:id')
+  public async delete(@Param('id', ParseUUIDPipe) id: string): Promise<User> {
+    const deleteUser = await this.deleteUserService.execute({ id });
+
+    return deleteUser;
   }
 }

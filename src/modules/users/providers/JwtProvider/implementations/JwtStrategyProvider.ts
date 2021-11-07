@@ -19,12 +19,15 @@ export default class JwtStrategyProvider extends PassportStrategy(
     });
   }
 
+  // Write user object inside session
   public async validate({ sub }: ITokenPayload) {
     const user = await this.userRepository.findById(sub);
 
     if (!user) {
       throw new UnauthorizedException();
     }
+
+    delete user.password;
 
     return user;
   }

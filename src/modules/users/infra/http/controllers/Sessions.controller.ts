@@ -1,8 +1,10 @@
+import { Body, Controller, Inject, Post, ValidationPipe } from '@nestjs/common';
+
 import { CreateSessionDTO } from '@modules/users/dtos/CreateSessionDTO';
 import AuthenticateUserService, {
   ICreateSessionResponse,
 } from '@modules/users/services/AuthenticateUser.service';
-import { Body, Controller, Inject, Post, ValidationPipe } from '@nestjs/common';
+import { SetPublicRoute } from '../decorators/SetPublicRoute.decorator';
 
 @Controller('sessions')
 export default class SessionsController {
@@ -11,6 +13,7 @@ export default class SessionsController {
     private authenticateUserService: AuthenticateUserService
   ) {}
 
+  @SetPublicRoute()
   @Post()
   public async create(
     @Body(ValidationPipe) createSessionDTO: CreateSessionDTO
