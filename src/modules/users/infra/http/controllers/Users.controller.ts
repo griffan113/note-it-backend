@@ -7,16 +7,19 @@ import {
   ParseUUIDPipe,
   Post,
   Put,
+  UseGuards,
   ValidationPipe,
 } from '@nestjs/common';
 import { User } from '@prisma/client';
+import { AuthGuard } from '@nestjs/passport';
 
 import { CreateUserDTO } from '@modules/users/dtos/CreateUserDTO';
+import { UpdateUserDTO } from '@modules/users/dtos/UpdateUserDTO';
 import CreateUserService from '@modules/users/services/CreateUser.service';
 import IndexUsersService from '@modules/users/services/IndexUsers.service';
-import { UpdateUserDTO } from '@modules/users/dtos/UpdateUserDTO';
 import UpdateUserService from '@modules/users/services/UpdateUser.service';
 
+@UseGuards(AuthGuard())
 @Controller('users')
 export default class UsersController {
   constructor(

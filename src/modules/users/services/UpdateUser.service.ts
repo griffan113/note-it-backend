@@ -68,6 +68,8 @@ export default class UpdateUserService {
 
     const updateUser = await this.userRepository.update(findUser);
 
+    delete updateUser.password;
+
     return updateUser;
   }
 }
