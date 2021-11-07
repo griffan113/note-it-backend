@@ -1,11 +1,6 @@
 import { IUserRepository } from '@modules/users/repositories/IUserRepository';
 import { ITokenPayload } from '@modules/users/types/ITokenPayload';
-import {
-  BadRequestException,
-  Inject,
-  Injectable,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy, ExtractJwt } from 'passport-jwt';
 
