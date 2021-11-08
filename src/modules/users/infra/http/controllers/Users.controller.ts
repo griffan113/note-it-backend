@@ -8,7 +8,6 @@ import {
   ParseUUIDPipe,
   Post,
   Put,
-  UseGuards,
   ValidationPipe,
 } from '@nestjs/common';
 import { User } from '@prisma/client';
@@ -20,7 +19,7 @@ import IndexUsersService from '@modules/users/services/IndexUsers.service';
 import UpdateUserService from '@modules/users/services/UpdateUser.service';
 import DeleteUserService from '@modules/users/services/DeleteUser.service';
 import { SetPublicRoute } from '../decorators/SetPublicRoute.decorator';
-import { EnsureAdminGuard } from '../guards/EnsureAdmin.guard';
+import { SetAdminRoute } from '../decorators/SetAdminRoute.decorator';
 
 @Controller('users')
 export default class UsersController {
@@ -38,7 +37,7 @@ export default class UsersController {
     private deleteUserService: DeleteUserService
   ) {}
 
-  @UseGuards(EnsureAdminGuard)
+  @SetAdminRoute()
   @Get()
   public async index(): Promise<User[]> {
     const users = await this.indexUsersService.execute();
