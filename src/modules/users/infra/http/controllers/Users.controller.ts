@@ -20,6 +20,7 @@ import UpdateUserService from '@modules/users/services/UpdateUser.service';
 import DeleteUserService from '@modules/users/services/DeleteUser.service';
 import { SetPublicRoute } from '../decorators/SetPublicRoute.decorator';
 import { SetAdminRoute } from '../decorators/SetAdminRoute.decorator';
+import { GetUser } from '../decorators/GetUser.decorator';
 
 @Controller('users')
 export default class UsersController {
@@ -57,11 +58,13 @@ export default class UsersController {
 
   @Put('/:id')
   public async update(
+    @GetUser() user: User,
     @Param('id', ParseUUIDPipe) id: string,
     @Body(ValidationPipe) updateUserDto: UpdateUserDTO
   ): Promise<User> {
     const updateUser = await this.updateUserService.execute({
       id,
+      currentUser: user,
       ...updateUserDto,
     });
 
