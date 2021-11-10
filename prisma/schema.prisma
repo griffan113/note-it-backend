@@ -24,10 +24,11 @@ model Note {
   id         String   @id @default(uuid())
   title      String
   content    String
+  color      String   @default("fff")
   user_id    String
+  user       User     @relation(fields: [user_id], references: [id])
   created_at DateTime @default(now())
   updated_at DateTime @default(now())
-  user       User     @relation(fields: [user_id], references: [id])
 
   @@index([user_id], map: "Note_user_id_fkey")
   @@map("notes")

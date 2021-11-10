@@ -1,19 +1,52 @@
-import { Note } from '.prisma/client';
-import { Controller, Get, Inject } from '@nestjs/common';
+import { Note, User } from '.prisma/client';
+import {
+  Body,
+  Controller,
+  Delete,
+  Inject,
+  Param,
+  ParseUUIDPipe,
+  Post,
+  ValidationPipe,
+} from '@nestjs/common';
 
-import IndexNotesService from '@modules/notes/services/IndexNotes.service';
+import { CreateNoteDTO } from '@modules/notes/dtos/CreateNoteDTO';
+import CreateNoteService from '@modules/notes/services/CreateNote.service';
+import DeleteNoteService from '@modules/notes/services/DeleteNote.service';
+import { GetUser } from '@modules/users/infra/http/decorators/GetUser.decorator';
 
 @Controller('notes')
 export default class NotesController {
   constructor(
-    @Inject('IndexNotesService')
-    private indexNotesService: IndexNotesService
+    @Inject('CreateNoteService')
+    private createNoteService: CreateNoteService,
+
+    @Inject('DeleteNoteService')
+    private deleteNoteService: DeleteNoteService
   ) {}
 
-  @Get()
-  public async index(): Promise<Note[]> {
-    const users = await this.indexNotesService.execute();
+  @Post()
+  public async create(
+    @GetUser() currentUser: User,
+    @Body(ValidationPipe) createNoteDTO: CreateNoteDTO
+  ): Promise<Note> {
+    const createNote = await this.createNoteService.execute(
+      currentUser,
+      createNoteDTO
+    );
 
-    return users;
+    return createNote;
+  }
+
+  @Delete(':id')
+  public async delete(
+    @GetUser() currentUser: User,
+    @Param('id', ParseUUIDPipe) id: string
+  ): Promise<Note> {
+    const deleteNote = await this.deleteNoteService.execute(currentUser, {
+      id,
+    });
+
+    return deleteNote;
   }
 }

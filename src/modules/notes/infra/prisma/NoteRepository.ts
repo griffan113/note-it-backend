@@ -18,8 +18,10 @@ export default class NoteRepository implements INoteRepository {
     return note;
   }
 
-  public async findAllNotes(): Promise<Note[]> {
-    const notes = await this.ormRepository.note.findMany();
+  public async findAllNotesFromUser(user_id: string): Promise<Note[]> {
+    const notes = await this.ormRepository.note.findMany({
+      where: { user_id },
+    });
 
     return notes;
   }

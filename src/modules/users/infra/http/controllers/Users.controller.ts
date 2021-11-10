@@ -21,6 +21,7 @@ import DeleteUserService from '@modules/users/services/DeleteUser.service';
 import { SetPublicRoute } from '../decorators/SetPublicRoute.decorator';
 import { SetAdminRoute } from '../decorators/SetAdminRoute.decorator';
 import { GetUser } from '../decorators/GetUser.decorator';
+import ShowUserService from '@modules/users/services/ShowUser.service';
 
 @Controller('users')
 export default class UsersController {
@@ -35,7 +36,10 @@ export default class UsersController {
     private updateUserService: UpdateUserService,
 
     @Inject('DeleteUserService')
-    private deleteUserService: DeleteUserService
+    private deleteUserService: DeleteUserService,
+
+    @Inject('ShowUserService')
+    private showUserService: ShowUserService
   ) {}
 
   @SetAdminRoute()
@@ -56,7 +60,7 @@ export default class UsersController {
     return createUser;
   }
 
-  @Put('/:id')
+  @Put(':id')
   public async update(
     @GetUser() user: User,
     @Param('id', ParseUUIDPipe) id: string,
@@ -71,10 +75,17 @@ export default class UsersController {
     return updateUser;
   }
 
-  @Delete('/:id')
+  @Delete(':id')
   public async delete(@Param('id', ParseUUIDPipe) id: string): Promise<User> {
     const deleteUser = await this.deleteUserService.execute({ id });
 
     return deleteUser;
+  }
+
+  @Get(':id')
+  public async show(@Param('id', ParseUUIDPipe) id: string): Promise<User> {
+    const showUser = await this.showUserService.execute({ id });
+
+    return showUser;
   }
 }
