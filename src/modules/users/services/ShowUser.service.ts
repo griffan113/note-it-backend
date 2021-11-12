@@ -19,6 +19,8 @@ export default class ShowUserService {
 
     if (!findUser) throw new NotFoundException('User not found');
 
+    delete findUser.password;
+
     return findUser;
   }
 }

@@ -3,10 +3,11 @@ import { PrismaService } from '@shared/infra/prisma/Prisma.service';
 
 import UserRepository from '@modules/users/infra/prisma/repositories/UserRepository';
 import NotesController from './infra/http/controllers/Notes.controller';
-import NoteRepository from './infra/prisma/NoteRepository';
+import NoteRepository from './infra/prisma/repositories/NoteRepository';
 import CreateNoteService from './services/CreateNote.service';
 import IndexNotesService from '../users/services/IndexNotesFromUser.service';
 import DeleteNoteService from './services/DeleteNote.service';
+import UpdateNoteService from './services/UpdateNote.service';
 
 @Module({
   providers: [
@@ -16,6 +17,7 @@ import DeleteNoteService from './services/DeleteNote.service';
     { provide: 'IndexNotesService', useClass: IndexNotesService },
     { provide: 'CreateNoteService', useClass: CreateNoteService },
     { provide: 'DeleteNoteService', useClass: DeleteNoteService },
+    { provide: 'UpdateNoteService', useClass: UpdateNoteService },
   ],
   controllers: [NotesController],
 })

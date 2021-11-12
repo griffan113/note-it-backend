@@ -43,10 +43,10 @@ export default class NoteRepository implements INoteRepository {
   }
 
   public async update(note: Note): Promise<Note> {
-    const { id, content, title } = note;
+    const { id, content, title, color } = note;
 
     const updateNote = await this.ormRepository.note.update({
-      data: { content, title },
+      data: { content, title, color },
       where: { id },
     });
 

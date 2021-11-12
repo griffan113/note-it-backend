@@ -16,7 +16,7 @@ import UpdateUserService from './services/UpdateUser.service';
 import AuthenticateUserService from './services/AuthenticateUser.service';
 import DeleteUserService from './services/DeleteUser.service';
 import ShowUserService from './services/ShowUser.service';
-import NoteRepository from '@modules/notes/infra/prisma/NoteRepository';
+import NoteRepository from '@modules/notes/infra/prisma/repositories/NoteRepository';
 import IndexNotesService from './services/IndexNotesFromUser.service';
 import IndexNotesFromUserController from './infra/http/controllers/IndexNotesFromUser.controller';
 
